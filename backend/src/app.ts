@@ -1,3 +1,4 @@
+import express from "express";
 import { loadEnv } from "./config/env";
 import { PASSWORD_ROUNDS } from "./config/limits";
 import { createApp } from "./create-app";
@@ -6,8 +7,7 @@ import { createSmtpMailer } from "./lib/mailer";
 
 const env = loadEnv();
 
-// Default export is what Vercel runs as a function; server.ts adds app.listen for local runs.
-const app = createApp({
+const api = createApp({
   db: createDb(env.DATABASE_URL).db,
   mailer: createSmtpMailer({
     host: env.SMTP_HOST,
@@ -26,5 +26,9 @@ const app = createApp({
     corsOrigins: env.CORS_ORIGINS === "*" ? "*" : env.CORS_ORIGINS.split(",").map((origin) => origin.trim()),
   },
 });
+
+// Vercel runs the default export as a function and only accepts an entry file that imports express itself;
+// server.ts adds app.listen for local and Docker runs.
+const app = express().disable("x-powered-by").use(api);
 
 export default app;

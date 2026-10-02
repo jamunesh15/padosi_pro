@@ -9,6 +9,8 @@ docker-compose.yml   Postgres + Mailpit + API in one command
 DESIGN.md  Architecture, trade-offs, what's next
 ```
 
+**Hosted API:** https://padosi-pro-api.vercel.app/api (health check: [`/api/health`](https://padosi-pro-api.vercel.app/api/health)). The APK talks to this, and OTP emails are sent for real through Gmail SMTP.
+
 ## Prerequisites
 
 - Node.js 20 or newer (built with 24) and npm
@@ -136,7 +138,7 @@ eas build:configure    # first time only, links the project
 eas build -p android --profile preview
 ```
 
-- Set `EXPO_PUBLIC_API_URL` in `mobile/eas.json` (`build.preview.env`) to the hosted backend before building.
+- The `preview` profile in `mobile/eas.json` builds an `.apk` pointed at the hosted API (`EXPO_PUBLIC_API_URL`). Change that URL to build against your own backend.
 - The build finishes with a download link for the `.apk`.
 
 **Local build instead** (needs Android Studio / SDK and JDK 17):
@@ -151,15 +153,10 @@ The APK lands in `android/app/build/outputs/apk/release/`.
 
 ## Deploy the backend (Vercel + Neon + Gmail SMTP)
 
-1. Create a Neon Postgres database and copy its **pooled** connection string.
-2. Run migrations and seed against it once:
-   ```bash
-   DATABASE_URL="<neon url>" npm run db:setup
-   ```
-3. Create a Vercel project with root directory `backend/`.
-   - Vercel runs `src/app.ts`, whose default export is the Express app.
-   - Add the variables from the table above as environment variables.
-4. Set the `SMTP_*` and `MAIL_FROM` variables to the Gmail address and its app password, as in `.env.example`.
+1. Create a Vercel project for the `backend/` folder. `backend/vercel.json` marks it as an Express app, and Vercel runs `src/app.ts`, whose default export is the app.
+2. In Vercel **Storage**, create a Neon Postgres database and connect it to the project with the prefix `DATABASE`. That sets `DATABASE_URL`.
+3. Add the other variables from the table above. Use Gmail for `SMTP_*` and `MAIL_FROM`, as in `.env.example`.
+4. Deploy. The `vercel-build` script runs the migrations and seeds the task catalogue before each build. Both are idempotent, so redeploys are safe.
 
 ## API
 
