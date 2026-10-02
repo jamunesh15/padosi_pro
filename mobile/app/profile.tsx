@@ -106,6 +106,8 @@ export default function ProfileScreen() {
           autoComplete="tel-national"
           textContentType="telephoneNumber"
           transform={toLocalMobile}
+          returnKeyType="next"
+          onSubmitEditing={() => form.setFocus('addressLine1')}
         />
         <FormField
           control={form.control}
@@ -138,7 +140,7 @@ export default function ProfileScreen() {
           placeholder="e.g. Pune"
           autoCapitalize="words"
           textContentType="addressCity"
-          returnKeyType="next"
+          returnKeyType="done"
         />
         <Controller
           control={form.control}
@@ -163,6 +165,8 @@ export default function ProfileScreen() {
           autoComplete="postal-code"
           textContentType="postalCode"
           transform={toPincode}
+          returnKeyType="next"
+          onSubmitEditing={() => form.setFocus('businessName')}
         />
         <FormField
           control={form.control}

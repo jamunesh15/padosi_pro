@@ -81,6 +81,8 @@ export const TextField = React.forwardRef<TextInput, TextFieldProps>(function Te
             setFocused(false);
             onBlur?.(event);
           }}
+          // "Next" moves focus without closing the keyboard in between.
+          submitBehavior={inputProps.returnKeyType === 'next' ? 'submit' : undefined}
           {...inputProps}
         />
         {revealable ? (
