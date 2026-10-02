@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: padosipro
+      POSTGRES_PASSWORD: padosipro
+      POSTGRES_DB: padosipro
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U padosipro -d padosipro"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  mail:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+  api:
+    build: ./backend
+    ports:
+      - "4000:4000"
+    # Local-only values. Mail goes to Mailpit unless SMTP_* are set in a root .env (see .env.example).
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgres://padosipro:padosipro@db:5432/padosipro
+      JWT_SECRET: local-docker-jwt-secret-not-for-production
+      JWT_EXPIRES_IN: 7d
+      OTP_SECRET: local-docker-otp-secret-not-for-production
+      SMTP_HOST: ${SMTP_HOST:-mail}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      MAIL_FROM: ${MAIL_FROM:-PadosiPro <no-reply@padosipro.local>}
+      CORS_ORIGINS: "*"
+    depends_on:
+      db:
+        condition: service_healthy
+      mail:
+        condition: service_started
+
+volumes:
+  pgdata:
