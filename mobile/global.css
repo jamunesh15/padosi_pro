@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Colours taken from app.padosipro.com: primary #155C49, page #FAFAF7, text #101828, muted #667085, border #D0D5DD. */
+@layer base {
+  :root {
+    --background: 60 23% 97.5%;
+    --foreground: 220 43% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 43% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 43% 11%;
+    --primary: 164 63% 22%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 220 43% 11%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 221 13% 46%;
+    --accent: 164 30% 94%;
+    --accent-foreground: 164 63% 22%;
+    --destructive: 4 74% 49%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217 16% 84%;
+    --input: 217 16% 84%;
+    --ring: 164 63% 22%;
+    --radius: 0.75rem;
+  }
+}
