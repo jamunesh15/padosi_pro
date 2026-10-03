@@ -9,7 +9,9 @@ docker-compose.yml   Postgres + Mailpit + API in one command
 DESIGN.md  Architecture, trade-offs, what's next
 ```
 
-**Hosted API:** https://padosi-pro-api.vercel.app/api (health check: [`/api/health`](https://padosi-pro-api.vercel.app/api/health)). The APK talks to this, and OTP emails are sent for real through Gmail SMTP.
+**Android APK:** [Download PadosiPro.apk](https://expo.dev/artifacts/eas/q566qIYs89RhLDKVnfN5A3xYQ5r0jzRUxr925r4F0CU.apk). If Android warns about an app from an unknown source, choose "Install anyway".
+
+**Hosted API:** https://padosi-pro-api.vercel.app/api (health check: [`/api/health`](https://padosi-pro-api.vercel.app/api/health)). The APK talks to this, and OTP emails are sent for real through Gmail SMTP. Check spam if the code doesn't arrive.
 
 ## Prerequisites
 
